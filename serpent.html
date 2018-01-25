@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Serpent</title>
+		<script>
+
+			var canvas = null;
+			var loop = null;
+			var direction = "RIGHT";
+			var previous_direction = null;
+			var speed = 10;
+			var snake = [
+				{x: 2, y: 0},
+				{x: 1, y: 0},
+				{x: 0, y: 0}
+			];
+			var apple = {x: null, y: null};
+			var score = 0;
+
+			function change_direction(event)
+			{
+				switch (event.keyCode) {
+					case 37:
+						if (previous_direction != "RIGHT") {
+							direction = "LEFT";
+						}
+						break;
+					case 38:
+						if (previous_direction != "DOWN") {
+							direction = "UP";
+						}
+						break;
+					case 39:
+						if (previous_direction != "LEFT") {
+							direction = "RIGHT";
+						}
+						break;
+					case 40:
+						if (previous_direction != "UP") {
+							direction = "DOWN";
+						}
+						break;
+				}
+			}
+
+			function next_frame()
+			{
+				previous_direction = direction;
+
+				canvas.fillStyle = "#000000";
+				canvas.fillRect(0, 0, 400, 420);
+				canvas.fillStyle = "#FF0000";
+				canvas.fillRect(apple.x * 20, apple.y * 20, 20, 20);
+				for (var i = 0; i < snake.length; i++) {
+					canvas.fillStyle = "#FFFFFF";
+					canvas.fillRect(snake[i].x * 20, snake[i].y * 20, 20, 20);
+				}
+				canvas.fillStyle = "#FFFFFF";
+				canvas.textBaseline = "top";
+				canvas.font = "14px monospace";
+				canvas.fillText(score, 3, 403);
+
+				var new_head = {x: snake[0].x, y: snake[0].y};
+				switch (direction) {
+					case "LEFT":
+						new_head.x--;
+						break;
+					case "UP":
+						new_head.y--;
+						break;
+					case "RIGHT":
+						new_head.x++;
+						break;
+					case "DOWN":
+						new_head.y++;
+						break;
+				}
+				snake.unshift(new_head);
+				var tail = snake.pop();
+
+				var x_out_of_bounds = snake[0].x < 0 || snake[0].x > 19;
+				var y_out_of_bounds = snake[0].y < 0 || snake[0].y > 19;
+				if (x_out_of_bounds || y_out_of_bounds) {
+					game_over();
+				}
+
+				if (snake[0].x == apple.x && snake[0].y == apple.y) {
+					score++;
+					snake.push(tail);
+					move_apple();
+				}
+
+				for (var j = 1; j < snake.length; j++) {
+					if (snake[0].x == snake[j].x && snake[0].y == snake[j].y) {
+						game_over();
+					}
+				}
+			}
+
+			function move_apple()
+			{
+				while (true) {
+					var x_rand = Math.floor(Math.random() * 19) + 1;
+					var y_rand = Math.floor(Math.random() * 19) + 1;
+					var collision = false;
+					for (var i = 0; i < snake.length; i++) {
+						if (snake[i].x == x_rand && snake[i].y == y_rand) {
+							collision = true;
+							break;
+						}
+					}
+					if (!collision) {
+						apple = {x: x_rand, y: y_rand};
+						break;
+					}
+				}
+			}
+
+			function game_over()
+			{
+				clearInterval(loop);
+
+				canvas.fillStyle = "#FF0000";
+				canvas.fillRect(0, 200, 400, 20);
+				canvas.fillStyle = "#FFFFFF";
+				canvas.textBaseline = "top";
+				canvas.font = "14px monospace";
+				canvas.fillText("GAME OVER", 3, 203);
+			}
+
+			function bootstrap()
+			{
+				canvas = document.querySelector("#canvas");
+				canvas = canvas.getContext("2d");
+				document.addEventListener("keydown", change_direction);
+				move_apple();
+				loop = setInterval(next_frame, 1000 / speed);
+			}
+
+			document.addEventListener("DOMContentLoaded", bootstrap);
+
+		</script>
+	</head>
+	<body>
+		<canvas id="canvas" width="400" height="420"></canvas>
+</html>
