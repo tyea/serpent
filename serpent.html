@@ -49,13 +49,15 @@
 				previous_direction = direction;
 
 				canvas.fillStyle = "#000000";
-				canvas.fillRect(0, 0, 400, 420);
+				canvas.fillRect(0, 0, 400, 400);
 				canvas.fillStyle = "#FF0000";
 				canvas.fillRect(apple.x * 20, apple.y * 20, 20, 20);
 				for (var i = 0; i < snake.length; i++) {
 					canvas.fillStyle = "#FFFFFF";
 					canvas.fillRect(snake[i].x * 20, snake[i].y * 20, 20, 20);
 				}
+				canvas.fillStyle = "#666666";
+				canvas.fillRect(0, 400, 420, 420);
 				canvas.fillStyle = "#FFFFFF";
 				canvas.textBaseline = "top";
 				canvas.font = "14px monospace";
@@ -121,7 +123,7 @@
 			{
 				clearInterval(loop);
 
-				canvas.fillStyle = "#FF0000";
+				canvas.fillStyle = "#666666";
 				canvas.fillRect(0, 200, 400, 20);
 				canvas.fillStyle = "#FFFFFF";
 				canvas.textBaseline = "top";
@@ -144,4 +146,5 @@
 	</head>
 	<body>
 		<canvas id="canvas" width="400" height="420"></canvas>
+	</body>
 </html>
