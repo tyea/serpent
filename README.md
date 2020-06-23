@@ -2,7 +2,11 @@
 
 ## About
 
-Serpent is a Snake clone written in JavaScript.
+Serpent is a [Snake](https://en.wikipedia.org/wiki/Snake_(video_game_genre)) clone written in JavaScript.
+
+## Screenshots
+
+![](screenshot_01.png)
 
 ## Author
 
